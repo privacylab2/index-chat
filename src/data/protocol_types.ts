@@ -29,14 +29,14 @@ export const validAlgo: Record<Algo, Uint8Array> = Object.fromEntries(
 //   )
 // ) as Record<Algo, Uint8Array[]>;
 
-function chunkModifiers(special: Uint8Array): Uint8Array[] {
-    const chunks: Uint8Array[] = [];
-    for (let i = 0; i < special.length; i += 3) {
-        const chunk = special.slice(i, i + 3);
-        if (chunk.length === 3) chunks.push(chunk);
-    }
-    return chunks;
-}
+// function chunkModifiers(special: Uint8Array): Uint8Array[] {
+//     const chunks: Uint8Array[] = [];
+//     for (let i = 0; i < special.length; i += 3) {
+//         const chunk = special.slice(i, i + 3);
+//         if (chunk.length === 3) chunks.push(chunk);
+//     }
+//     return chunks;
+// }
 
 type Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 type Version = `${Digit}${Digit}${Digit}${Digit}`;

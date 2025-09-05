@@ -1,2 +1,2 @@
 //!REQUIREMENT: SET TO FALSE IN PRODUCTION
-export const DEBUG_MODE = false;
+export const DEBUG_MODE = true;

@@ -1,0 +1,2 @@
+# directory
+- **secure_nonce_AES256.ts** : a generator function to generate secure AES-256-GCM nonces and prevent reuse. Note: must make sure counter isnt the same as last generated counter cross restarts.
