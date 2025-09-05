@@ -69,4 +69,5 @@ export type Special = string | "NULL";
 export type Protocol = `${App}-${Version}-${Intent}-${Algorithim}-${Special}`;
 ```
 
-Special can be anything, but the reference uses 3 byte chunks 
+Special can be anything, but the reference uses 3 byte chunks to denote "modifiers", such as 256, GCM, and P13
+for example, INIT + AES-256 + AES-GCM = "NIT256GCM"
