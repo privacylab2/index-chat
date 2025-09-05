@@ -15,7 +15,7 @@ The first thing the protocol does on app install / account creation is generatio
 
 ## Message Protocol
 Index uses a message format to identify what messages are and prevent message reuse attacks.
-An example message is something like `NDX-0001-DKX-X25-INIT`
+An example message is something like `NDX-0001-DKX-X25-NIT`
 
 The order of messages is as follows:<br/>
 `APP-VERSION-INTENT-ALGORITHIM-SPECIAL`
