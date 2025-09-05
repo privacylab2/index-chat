@@ -16,13 +16,14 @@ export function generateKXKeypair() {
 
 
 
+interface UnauthenticatedMessage { meta: Uint8Array, data: Uint8Array };
 /**
  * 
  * @param contextMessage the context message (in format as seen in validation.ts and implementation.md)
  * @param data the data of the message to transmit (not context) 
  * @returns 
  */
-export function createUnauthenticatedMessage(contextU8: Uint8Array, data: Uint8Array) {
+export function createUnauthenticatedMessage(contextU8: Uint8Array, data: Uint8Array): UnauthenticatedMessage | boolean {
     const nonce: Uint8Array = sodium.randombytes_buf(16)
     // const contextU8: Uint8Array = new TextEncoder().encode(contextMessage);
     if (!protocolValid(parseProtocolBytes(contextU8))) return false;
@@ -34,12 +35,32 @@ export function createUnauthenticatedMessage(contextU8: Uint8Array, data: Uint8A
     }
 }
 
-export function signMessage(messageObject: object, identityPrivateKey: Uint8Array) {
+interface SignedMessage { data: Uint8Array, signature: Uint8Array }
+/** signs a response to createUnauthenticatedMessage */
+export function signMessage(messageObject: object, identityPrivateKey: Uint8Array): SignedMessage {
     const encoded: Uint8Array = encode(messageObject);
-    const signature: Uint8Array = sodium.crypto_sign(encoded, identityPrivateKey);
+    const signature: Uint8Array = sodium.crypto_sign_detached(encoded, identityPrivateKey);
     return {
         data: encoded,
         signature
+    }
+}
+
+export function parseSignedMessage(signedMessageObject: SignedMessage, identityPublicKey: Uint8Array) {
+    const signature: Uint8Array = signedMessageObject.signature;
+    const data: Uint8Array = signedMessageObject.data;
+    const dataUnpacked: UnauthenticatedMessage = decode(data) as UnauthenticatedMessage;
+    const unpackedMeta: Uint8Array = dataUnpacked.meta;
+    const unpackedData: Uint8Array = dataUnpacked.data;
+    const nonce: Uint8Array = unpackedMeta.slice(0,16)
+    const context: Uint8Array = unpackedMeta.slice(16)
+
+    const signatureValid: boolean = sodium.crypto_sign_verify_detached(signature, data, identityPublicKey);
+    return {
+        nonce,
+        context,
+        data: unpackedData,
+        signatureValid
     }
 }
 
@@ -54,16 +75,19 @@ export function parseMessageMetadata(meta: Uint8Array) {
 //     (window as any).generateIdentityKeypair = generateIdentityKeypair;
 //     (window as any).isValidApp = isValidApp;
 //     (window as any).createUm = createUnauthenticatedMessage;
-//     (window as any).pmm = parseMessageMetadata
+//     (window as 
+// any).pmm = parseMessageMetadata
 // }
+import { encode, decode } from '@msgpack/msgpack';
+
 expose({
     sodium,
     generateIdentityKeypair,
     isValidApp,
     createUm: createUnauthenticatedMessage,
     sign: signMessage,
-    pmm: parseMessageMetadata
+    pmm: parseMessageMetadata,
+    encode, decode
 })
 
 import '../data/storage/local_securestore'
-import { encode } from '@msgpack/msgpack';
