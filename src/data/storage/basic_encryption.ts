@@ -1,42 +1,5 @@
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO
-//TS PMO (tennesine phosphate molybdenum)
 import sodium from 'libsodium-wrappers';
+await sodium.ready;
 import { argon2id } from "hash-wasm";
 import { expose } from '../../lib/_globals';
 
