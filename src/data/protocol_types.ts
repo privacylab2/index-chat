@@ -1,6 +1,6 @@
 import { App, SELF_APP_ID, validApps } from "./valid_apps";
 import { concatUint8Arrays } from "../lib/crypto_util";
-import { DEBUG_MODE } from "../lib/_globals";
+import { DEBUG_MODE, expose } from "../lib/_globals";
 
 export const validIntentArr = ["DKX", "MSG", "NUL"] as const;
 export type Intent = typeof validIntentArr[number];
@@ -84,14 +84,21 @@ export enum Modifiers {
     POLY1305 = "P13",
     NULL = "NUL"
 }
-(window as any).GCM = generateContextMessage;
 
 
 // Expose functions and constants
-if (DEBUG_MODE) {
-    (window as any).SELF_APP_ID = SELF_APP_ID;
-    (window as any).validApps = validApps;
-    (window as any).validIntent = validIntent;
-    (window as any).validAlgo = validAlgo;
-    (window as any).Modifiers = Modifiers;
-}
+// if (DEBUG_MODE) {
+//     (window as any).SELF_APP_ID = SELF_APP_ID;
+//     (window as any).validApps = validApps;
+//     (window as any).validIntent = validIntent;
+//     (window as any).validAlgo = validAlgo;
+//     (window as any).Modifiers = Modifiers;
+// }
+expose({
+    SELF_APP_ID: SELF_APP_ID,
+    validApps: validApps,
+    validIntent: validIntent,
+    validAlgo: validAlgo,
+    Modifiers: Modifiers,
+    GCM: generateContextMessage
+})

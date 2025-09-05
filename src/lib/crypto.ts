@@ -2,7 +2,7 @@
 import sodium from 'libsodium-wrappers';
 import { concatUint8Arrays } from './crypto_util';
 import { isValidApp, parseProtocolBytes, protocolValid } from '../data/validation';
-import { DEBUG_MODE } from './_globals';
+import { DEBUG_MODE, expose } from './_globals';
 
 await sodium.ready;
 
@@ -40,10 +40,19 @@ export function parseMessageMetadata(meta: Uint8Array) {
         context: meta.slice(16)
     }
 }
-if (DEBUG_MODE) {
-    (window as any).sodium = sodium;
-    (window as any).generateIdentityKeypair = generateIdentityKeypair;
-    (window as any).isValidApp = isValidApp;
-    (window as any).createUm = createUnauthenticatedMessage;
-    (window as any).pmm = parseMessageMetadata
-}
+// if (DEBUG_MODE) {
+//     (window as any).sodium = sodium;
+//     (window as any).generateIdentityKeypair = generateIdentityKeypair;
+//     (window as any).isValidApp = isValidApp;
+//     (window as any).createUm = createUnauthenticatedMessage;
+//     (window as any).pmm = parseMessageMetadata
+// }
+expose({
+    sodium,
+    generateIdentityKeypair,
+    isValidApp,
+    createUm: createUnauthenticatedMessage,
+    pmm: parseMessageMetadata
+})
+
+import '../data/storage/local_securestore'

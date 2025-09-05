@@ -1,6 +1,6 @@
 import sodium from "libsodium-wrappers";
 import { concatUint8Arrays } from "../../lib/crypto_util";
-import { DEBUG_MODE } from "../../lib/_globals";
+import { DEBUG_MODE, expose } from "../../lib/_globals";
 
 function increment64BitArray(bytes: Uint8Array): Uint8Array {
     if (bytes.length !== 8) {
@@ -54,6 +54,6 @@ export function* NONCEGEN_AESGCM_256() {
     }
 }
 
-if (DEBUG_MODE) {
-    (window as any).ng = NONCEGEN_AESGCM_256
-}
+expose({
+    ng: NONCEGEN_AESGCM_256
+})

@@ -1,4 +1,4 @@
-import { DEBUG_MODE } from "../lib/_globals";
+import { DEBUG_MODE, expose } from "../lib/_globals";
 import { bytesIncludedIn } from "./byte_comparison";
 import { validApps } from "./valid_apps";
 
@@ -78,7 +78,7 @@ export function protocolValid(protocol: {
         && protocol.dashes;
 }
 
-if (DEBUG_MODE) {
-    (window as any).parseProtocolBytes = parseProtocolBytes;
-    (window as any).protocolValid = protocolValid;
-}
+expose({
+    parseProtocolBytes,
+    protocolValid
+})

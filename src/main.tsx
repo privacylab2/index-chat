@@ -5,6 +5,7 @@ import './index.css'
 import './lib/crypto.ts'
 import './data/protocol_types.ts'
 
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
