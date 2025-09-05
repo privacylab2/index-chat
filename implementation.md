@@ -14,7 +14,7 @@ The first thing the protocol does on app install / account creation is generatio
 <i>\* - Curve25519 is the preferred format for identity keys because it is highly trusted and has no mysterious constants. You can technically deviate but it is not recommended.</i>
 
 ## Message Protocol
-Index uses a message format to indetify what messages are and prevent message reuse attacks.
+Index uses a message format to identify what messages are and prevent message reuse attacks.
 An example message is something like `NDX-0001-DKX-X25-INIT`
 
 The order of messages is as follows:<br/>
