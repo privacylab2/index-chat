@@ -1,8 +1,8 @@
 //Make types for keys that require it to be the right type of key and functions to check
-import sodium, { crypto_sign_BYTES } from 'libsodium-wrappers';
+import sodium from 'libsodium-wrappers';
 import { concatUint8Arrays } from './crypto_util';
 import { isValidApp, parseProtocolBytes, protocolValid } from '../data/validation';
-import { DEBUG_MODE, expose } from './_globals';
+import { expose } from './_globals';
 
 await sodium.ready;
 

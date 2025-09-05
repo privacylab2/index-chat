@@ -1,4 +1,4 @@
-import { DEBUG_MODE, expose } from "../lib/_globals";
+import { expose } from "../lib/_globals";
 import { bytesIncludedIn } from "./byte_comparison";
 import { validApps } from "./valid_apps";
 

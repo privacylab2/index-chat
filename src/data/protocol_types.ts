@@ -1,6 +1,6 @@
 import { App, SELF_APP_ID, validApps } from "./valid_apps";
 import { concatUint8Arrays } from "../lib/crypto_util";
-import { DEBUG_MODE, expose } from "../lib/_globals";
+import { expose } from "../lib/_globals";
 
 export const validIntentArr = ["DKX", "MSG", "NUL"] as const;
 export type Intent = typeof validIntentArr[number];
