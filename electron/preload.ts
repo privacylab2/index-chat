@@ -1,4 +1,6 @@
-import { ipcRenderer, contextBridge } from 'electron'
+import { ipcRenderer, contextBridge, app } from 'electron'
+import fs from 'node:fs'
+import path from 'node:path'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -21,4 +23,40 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
   // You can expose other APTs you need here.
   // ...
+})
+
+async function ensureStore(name: string) {
+  const udp = await ipcRenderer.invoke('get-userdata-path')
+  const storePath = path.join(udp, '_ndxstore')
+  if (!fs.existsSync(storePath)) {
+    fs.mkdirSync(storePath, { recursive: true })
+  }
+
+  const storeFilePath: string = path.join(storePath, name)
+  if (!fs.existsSync(storeFilePath)) {
+    fs.writeFileSync(storeFilePath, "");
+  }
+  return storeFilePath
+}
+
+const ALLOW_ARBTIRARY_READ = true;
+
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  getUserDataPath: () => ipcRenderer.invoke('get-userdata-path'),
+  readFile: function (path: string) {
+    if (ALLOW_ARBTIRARY_READ) return fs.readFileSync(path); else throw new Error("Arbitrary read access disabled.")
+  },
+  ensureStore,
+
+  writeStore: async function (name: string, data: Uint8Array): Promise<string> {
+    const path = await ensureStore(name);
+    fs.writeFileSync(path, Buffer.from(data))
+    return path;
+  },
+
+  readStore: async function (name: string): Promise<Uint8Array> {
+    const path: string = await ensureStore(name);
+    return fs.readFileSync(path);
+  },
 })
