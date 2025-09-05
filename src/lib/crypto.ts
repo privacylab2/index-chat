@@ -1,7 +1,7 @@
 //Make types for keys that require it to be the right type of key and functions to check
 import sodium from 'libsodium-wrappers';
 import { concatUint8Arrays } from './crypto_util';
-import { isValidApp } from '../data/valid_apps';
+import { isValidApp } from '../data/validation';
 
 await sodium.ready;
 (window as any).sodium = sodium;

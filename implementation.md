@@ -50,6 +50,21 @@ Each client can choose what apps it allows/supports. It can also blocklist speci
 **! REQUIREMENT**:
 You may modify app, version, and special fields, but `INTENT`, `ALGORITHIM`, and `SPECIAl` handling must be kept exactly the same across clients unless all or the majority of clients decide to get rid of or add a new protocol/command.
 
-<br/>! WARNING: It is important to parse safely and uniformly to prevent including vulnerabilities and bugs, especially in memory safe languages. Perform validation on EVERY field, and parse front to back, using byte lengths, positions, and slicing, not splitting by seperator or reading until a character.
+<br/>! WARNING: It is important to parse safely and uniformly to prevent including vulnerabilities and bugs, especially in memory safe languages. Perform validation on EVERY field, and parse front to back, using byte lengths, positions, and slicing, not splitting by seperator or reading until a character.<br/>
+For example, in C, reading until a - could overflow and leak memory if a dash is not found. Parse the incoming message with zero trust.
 
 <br/>Right now, there is no way to actually directly verify that an app is what it says and isn't pretending to be something else. The main goal is to make networking easier, but, you can use the special field or extra data to attempt to add a verification system.
+
+<br/><br/>While this will not actually compile in TypeScript as it is too large to represent as a union, below is an official hypothetical type for message format to hopefully lessen ambiguity.
+
+```ts
+type Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+type Uppercase = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z";
+
+export type App = "NDX" | "ABC"; // so on
+export type Version = `${Digit}${Digit}${Digit}${Digit}`;
+export type Intent = `${Uppercase}${Uppercase}${Uppercase}`
+export type Algorithim = `${Uppercase}${Uppercase}${Uppercase}`
+export type Special = string | "NULL";
+export type Protocol = `${App}-${Version}-${Intent}-${Algorithim}-${Special}`;
+```
