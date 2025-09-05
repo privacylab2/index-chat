@@ -68,3 +68,5 @@ export type Algorithim = `${Uppercase}${Uppercase}${Uppercase}`
 export type Special = string | "NULL";
 export type Protocol = `${App}-${Version}-${Intent}-${Algorithim}-${Special}`;
 ```
+
+Special can be anything, but the reference uses 3 byte chunks 

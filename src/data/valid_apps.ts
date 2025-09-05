@@ -8,6 +8,8 @@ export const validApps: Record<App, Uint8Array> = Object.fromEntries(
   (["NDX"] as App[]).map(app => [app, new TextEncoder().encode(app)])
 ) as Record<App, Uint8Array>;
 
+export const selfAppBytes: Uint8Array = validApps[SELF_APP_ID];
+
 export function appIsValid(appBytes: Uint8Array) {
     if (appBytes.length != 3) return false;
     return bytesIncludedIn(Object.values(validApps), appBytes);    

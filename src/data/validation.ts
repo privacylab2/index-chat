@@ -1,11 +1,6 @@
+import { DEBUG_MODE } from "../lib/_globals";
 import { bytesIncludedIn } from "./byte_comparison";
 import { validApps } from "./valid_apps";
-
-export function isValidApp(appBytes: Uint8Array): boolean {
-    if (appBytes.length != 3) return false;
-    const acceptableApps: Uint8Array[] = Object.values(validApps);
-    return bytesIncludedIn(acceptableApps, appBytes);
-}
 
 export function isDash(dashByte: number): boolean {
     return dashByte === 45;
@@ -39,6 +34,15 @@ export function parseProtocolBytes(protocolBytes: Uint8Array): {
     }
 }
 
+
+
+
+export function isValidApp(appBytes: Uint8Array): boolean {
+    if (appBytes.length != 3) return false;
+    const acceptableApps: Uint8Array[] = Object.values(validApps);
+    return bytesIncludedIn(acceptableApps, appBytes);
+}
+
 function isValidVersion(versionBytes: Uint8Array) {
     if (versionBytes.length !== 4) return false;
     return versionBytes.every(b => b >= 48 && b <= 57); //must be 0000-9999, not required in every implementation but enforced by Index.
@@ -46,13 +50,15 @@ function isValidVersion(versionBytes: Uint8Array) {
 
 function isValidIntent(intentBytes: Uint8Array) {
     if (intentBytes.length !== 3) return false;
-    return intentBytes.every(b => b >= 65 && b <= 90);
+    return intentBytes.every(b => (b >= 65 && b <= 90) || (b >= 48 && b <= 57));
 }
+
 
 function isValidAlgo(algoBytes: Uint8Array) {
     if (algoBytes.length !== 3) return false;
-    return algoBytes.every(b => b >= 65 && b <= 90);
+    return algoBytes.every(b => (b >= 65 && b <= 90) || (b >= 48 && b <= 57));
 }
+
 
 
 export function protocolValid(protocol: {
@@ -64,10 +70,15 @@ export function protocolValid(protocol: {
     dashes: boolean;
     byteLength: number;
 }): boolean {
-    return protocol.byteLength > 17 
-        && isValidApp(protocol.app) 
+    return protocol.byteLength > 17
+        && isValidApp(protocol.app)
         && isValidVersion(protocol.version)
         && isValidIntent(protocol.intent)
         && isValidAlgo(protocol.algo)
         && protocol.dashes;
+}
+
+if (DEBUG_MODE) {
+    (window as any).parseProtocolBytes = parseProtocolBytes;
+    (window as any).protocolValid = protocolValid;
 }
