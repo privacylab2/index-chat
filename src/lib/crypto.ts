@@ -1,5 +1,5 @@
 //Make types for keys that require it to be the right type of key and functions to check
-import sodium from 'libsodium-wrappers';
+import sodium, { crypto_sign_BYTES } from 'libsodium-wrappers';
 import { concatUint8Arrays } from './crypto_util';
 import { isValidApp, parseProtocolBytes, protocolValid } from '../data/validation';
 import { DEBUG_MODE, expose } from './_globals';
@@ -34,6 +34,15 @@ export function createUnauthenticatedMessage(contextU8: Uint8Array, data: Uint8A
     }
 }
 
+export function signMessage(messageObject: object, identityPrivateKey: Uint8Array) {
+    const encoded: Uint8Array = encode(messageObject);
+    const signature: Uint8Array = sodium.crypto_sign(encoded, identityPrivateKey);
+    return {
+        data: encoded,
+        signature
+    }
+}
+
 export function parseMessageMetadata(meta: Uint8Array) {
     return {
         nonce: meta.slice(0, 16),
@@ -52,7 +61,9 @@ expose({
     generateIdentityKeypair,
     isValidApp,
     createUm: createUnauthenticatedMessage,
+    sign: signMessage,
     pmm: parseMessageMetadata
 })
 
 import '../data/storage/local_securestore'
+import { encode } from '@msgpack/msgpack';
