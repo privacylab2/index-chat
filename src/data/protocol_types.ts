@@ -1,6 +1,6 @@
-import { App, SELF_APP_ID, validApps } from "./valid_apps";
-import { concatUint8Arrays } from "../lib/crypt/crypto_util";
-import { expose } from "../lib/_globals";
+import { validApps } from "./valid_apps"
+import { expose, SELF_APP_ID } from "../lib/_globals";
+import { generateContextMessage } from "./generateContextMessage";
 
 export const validIntentArr = ["DKX", "MSG", "NUL"] as const;
 export type Intent = typeof validIntentArr[number];
@@ -39,30 +39,7 @@ export const validAlgo: Record<Algo, Uint8Array> = Object.fromEntries(
 // }
 
 type Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
-type Version = `${Digit}${Digit}${Digit}${Digit}`;
-
-export function generateContextMessage(
-    appId: App,
-    version: Version,
-    intent: Uint8Array,
-    algorithm: Uint8Array,
-    modifiers: string
-): Uint8Array {
-    const encoder = new TextEncoder();
-    const dash = encoder.encode("-");   // [45]
-    const appU8 = validApps[appId];
-    const versionU8 = encoder.encode(version);
-    const modifiersU8 = encoder.encode(modifiers);
-
-    return concatUint8Arrays(
-        appU8, dash,
-        versionU8, dash,
-        intent, dash,
-        algorithm, dash,
-        modifiersU8
-    );
-}
-
+export type Version = `${Digit}${Digit}${Digit}${Digit}`;
 
 // Example
 export enum Modifiers {

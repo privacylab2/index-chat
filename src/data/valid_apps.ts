@@ -1,8 +1,8 @@
+import { SELF_APP_ID } from "../lib/_globals";
 import { bytesIncludedIn } from "./byte_comparison";
 
 /** */
 export type App = "NDX";
-export const SELF_APP_ID: App = "NDX";
 
 export const validApps: Record<App, Uint8Array> = Object.fromEntries(
   (["NDX"] as App[]).map(app => [app, new TextEncoder().encode(app)])

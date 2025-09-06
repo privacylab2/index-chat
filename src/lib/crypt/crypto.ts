@@ -16,7 +16,7 @@ export function generateKXKeypair() {
 
 
 
-interface UnauthenticatedMessage { meta: Uint8Array, data: Uint8Array };
+export interface UnauthenticatedMessage { meta: Uint8Array, data: Uint8Array };
 /**
  * 
  * @param contextMessage the context message (in format as seen in validation.ts and implementation.md)
@@ -36,7 +36,7 @@ export function createUnauthenticatedMessage(contextU8: Uint8Array, data: Uint8A
     }
 }
 
-interface SignedMessage { data: Uint8Array, signature: Uint8Array }
+export interface SignedMessage { data: Uint8Array, signature: Uint8Array }
 /** signs a response to createUnauthenticatedMessage */
 export function signMessage(messageObject: object, identityPrivateKey: Uint8Array): SignedMessage {
     const encoded: Uint8Array = encode(messageObject);

@@ -15,11 +15,11 @@ export function parseProtocolBytes(protocolBytes: Uint8Array): {
     dashes: boolean;
     byteLength: number;
 } {
-    const app: Uint8Array = protocolBytes.slice(0, 3);
-    const version: Uint8Array = protocolBytes.slice(4, 8);
-    const intent: Uint8Array = protocolBytes.slice(9, 12);
-    const algo: Uint8Array = protocolBytes.slice(13, 16);
-    const special: Uint8Array = protocolBytes.slice(17);
+    const app: Uint8Array = protocolBytes.subarray(0, 3);
+    const version: Uint8Array = protocolBytes.subarray(4, 8);
+    const intent: Uint8Array = protocolBytes.subarray(9, 12);
+    const algo: Uint8Array = protocolBytes.subarray(13, 16);
+    const special: Uint8Array = protocolBytes.subarray(17);
     const dashes: boolean = [3, 8, 12, 16]
         .map(pos => protocolBytes[pos])
         .every(isDash);
