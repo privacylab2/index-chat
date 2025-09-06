@@ -21,6 +21,7 @@ interface UnauthenticatedMessage { meta: Uint8Array, data: Uint8Array };
  * 
  * @param contextMessage the context message (in format as seen in validation.ts and implementation.md)
  * @param data the data of the message to transmit (not context) 
+ * @param nonceGenerator a NONCEGEN_ANTIREPLAY generator object
  * @returns 
  */
 export function createUnauthenticatedMessage(contextU8: Uint8Array, data: Uint8Array, nonceGenerator: Generator): UnauthenticatedMessage | boolean {
