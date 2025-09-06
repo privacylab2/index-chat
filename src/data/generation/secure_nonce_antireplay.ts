@@ -55,7 +55,7 @@ export function bytesToU64BE(arr: Uint8Array) {
   return num;
 }
 
-export function* antiReplayNonceGen(timestampFunc?: Function): Generator<Uint8Array, void, unknown> {
+export function* NONCEGEN_ANTIREPLAY(timestampFunc?: Function): Generator<Uint8Array, void, unknown> {
   const timestamp = timestampFunc ?? getTimestamp;
   let baseTime: number = timestamp();
   const Uint16Arr: Uint16Array = new Uint16Array([0]);

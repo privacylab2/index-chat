@@ -92,7 +92,7 @@ expose({
 })
 
 import '../data/storage/local_securestore'
-import { antiReplayNonceGen } from '../data/generation/secure_nonce_antireplay';
+import { NONCEGEN_ANTIREPLAY } from '../data/generation/secure_nonce_antireplay';
 
 
-expose({antiReplayNonceGen})
+expose({NONCEGEN_ANTIREPLAY})
