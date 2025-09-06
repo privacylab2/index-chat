@@ -9,7 +9,7 @@ export interface SessionInitializationPayloadInterface {
 }
 export async function initializeSession(identityPrivateKey: Uint8Array, payload: SessionInitializationPayloadInterface) {
     const payloadData = {
-        payload.direct
+        direct: payload.direct
     };
     const contextMessage: Uint8Array = generateContextMessage(
         SELF_APP_ID,
