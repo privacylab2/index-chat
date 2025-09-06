@@ -65,6 +65,7 @@ export function parseSignedMessage(signedMessageObject: SignedMessage, identityP
     }
 }
 
+
 export function parseMessageMetadata(meta: Uint8Array) {
     return {
         nonce: meta.slice(0, 10),

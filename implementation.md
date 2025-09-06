@@ -8,6 +8,9 @@ When implementing your own app or version of the protocol, it is critical to fol
 Index is designed to be highly secure, and deviating from the protocol can introduce serious vulnerabilities.
 Still, I am one person, not a cryptography expert, and Index is open source. I cannot guarantee that my implementation of the protocol is perfect or bulletproof. If you notice issues in the code, please reach out.
 
+## Basic Security Protections
+- If in a Web/Electron/Tauri app, add a strict content security policy so that even if an XSS or RCE is found, it can't compromise security.
+- Wipe(zero) all secrets once they are no longer needed.
 ## Authentication
 The first thing the protocol does on app install / account creation is generation of an identity keypair. The keypair is **Curve25519**<sup>*</sup> and is used for signing messages to initiate a session.
 
