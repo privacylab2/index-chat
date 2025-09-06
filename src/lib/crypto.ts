@@ -23,8 +23,8 @@ interface UnauthenticatedMessage { meta: Uint8Array, data: Uint8Array };
  * @param data the data of the message to transmit (not context) 
  * @returns 
  */
-export function createUnauthenticatedMessage(contextU8: Uint8Array, data: Uint8Array): UnauthenticatedMessage | boolean {
-    const nonce: Uint8Array = sodium.randombytes_buf(16)
+export function createUnauthenticatedMessage(contextU8: Uint8Array, data: Uint8Array, nonceGenerator: Generator): UnauthenticatedMessage | boolean {
+    const nonce: Uint8Array = nonceGenerator.next().value as Uint8Array;
     // const contextU8: Uint8Array = new TextEncoder().encode(contextMessage);
     if (!protocolValid(parseProtocolBytes(contextU8))) return false;
     const meta: Uint8Array = concatUint8Arrays(nonce, contextU8)
@@ -52,8 +52,8 @@ export function parseSignedMessage(signedMessageObject: SignedMessage, identityP
     const dataUnpacked: UnauthenticatedMessage = decode(data) as UnauthenticatedMessage;
     const unpackedMeta: Uint8Array = dataUnpacked.meta;
     const unpackedData: Uint8Array = dataUnpacked.data;
-    const nonce: Uint8Array = unpackedMeta.slice(0,16)
-    const context: Uint8Array = unpackedMeta.slice(16)
+    const nonce: Uint8Array = unpackedMeta.slice(0,10)
+    const context: Uint8Array = unpackedMeta.slice(10)
 
     const signatureValid: boolean = sodium.crypto_sign_verify_detached(signature, data, identityPublicKey);
     return {
@@ -66,8 +66,8 @@ export function parseSignedMessage(signedMessageObject: SignedMessage, identityP
 
 export function parseMessageMetadata(meta: Uint8Array) {
     return {
-        nonce: meta.slice(0, 16),
-        context: meta.slice(16)
+        nonce: meta.slice(0, 10),
+        context: meta.slice(10)
     }
 }
 // if (DEBUG_MODE) {
@@ -87,7 +87,12 @@ expose({
     createUm: createUnauthenticatedMessage,
     sign: signMessage,
     pmm: parseMessageMetadata,
-    encode, decode
+    encode, decode,
+    psm: parseSignedMessage
 })
 
 import '../data/storage/local_securestore'
+import { antiReplayNonceGen } from '../data/generation/secure_nonce_antireplay';
+
+
+expose({antiReplayNonceGen})
