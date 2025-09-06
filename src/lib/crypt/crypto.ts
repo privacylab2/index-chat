@@ -1,8 +1,8 @@
 //Make types for keys that require it to be the right type of key and functions to check
 import sodium from 'libsodium-wrappers';
 import { concatUint8Arrays } from './crypto_util';
-import { isValidApp, parseProtocolBytes, protocolValid } from '../data/validation';
-import { expose } from './_globals';
+import { isValidApp, parseProtocolBytes, protocolValid } from '../../data/validation';
+import { expose } from '../_globals';
 
 await sodium.ready;
 
@@ -92,8 +92,8 @@ expose({
     psm: parseSignedMessage
 })
 
-import '../data/storage/local_securestore'
-import { NONCEGEN_ANTIREPLAY } from '../data/generation/secure_nonce_antireplay';
+import '../../data/storage/local_securestore'
+import { NONCEGEN_ANTIREPLAY } from '../../data/generation/secure_nonce_antireplay';
 
 
 expose({NONCEGEN_ANTIREPLAY})

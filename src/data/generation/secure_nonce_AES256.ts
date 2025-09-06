@@ -1,5 +1,5 @@
 import sodium from "libsodium-wrappers";
-import { concatUint8Arrays } from "../../lib/crypto_util";
+import { concatUint8Arrays } from "../../lib/crypt/crypto_util";
 import { expose } from "../../lib/_globals";
 
 function increment64BitArray(bytes: Uint8Array): Uint8Array {

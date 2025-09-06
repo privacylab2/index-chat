@@ -1,5 +1,5 @@
 import { App, SELF_APP_ID, validApps } from "./valid_apps";
-import { concatUint8Arrays } from "../lib/crypto_util";
+import { concatUint8Arrays } from "../lib/crypt/crypto_util";
 import { expose } from "../lib/_globals";
 
 export const validIntentArr = ["DKX", "MSG", "NUL"] as const;

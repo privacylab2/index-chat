@@ -163,6 +163,7 @@ if (unauthenticatedMessage == false) {
     throw new Error("Construction failed. Is context valid?")
 }
 ```
+Message data is typically [msgpack](https://en.wikipedia.org/wiki/MessagePack) format.
 
 NONCEGEN_ANTIREPLAY() is an ES generator function that generates never before used nonces based on a monotomic timestamp and 16-bit counter. It is used to prevent replay attacks.
 It is defined as so:
@@ -184,4 +185,32 @@ export function* NONCEGEN_ANTIREPLAY(timestampFunc?: Function): Generator<Uint8A
 }
 ```
 
+Anti replay nonce generation does not have to exactly match the official client, but it should be 10 bytes (unless other apps specifically recognize your nonce format), and never overlap even if storage is wiped or clock/timezone changes.
+
 timestamp is defined in [secure_nonce_antireplay](src/data/generation/secure_nonce_antireplay.ts). The important part is the it should never repeat, even across app restarts or clock rewinds.
+
+Next, you should sign the message. 
+
+In the reference client, it is done like so:
+```ts
+const signedMessage = signMessage(
+    unauthenticatedMessage,
+    identityPrivateKey
+)
+```
+
+The signed message can then be MessagePacked and sent over the network. (WebRTC P2P or relay is the intended method, but the protocol is transport agnostic)<br/><br/>Then, when you recieve the signed message, binary, unpack it with MessagePack, parse it, and verify the signature:
+```ts
+const parsedMessage = parseSignedMessage(
+    signedMessage,
+    identityPublicKey
+);
+
+const { nonce, context, data, signatureValid } = parsedMessage;
+if (!signatureValid) {
+    throw new Error("Invalid signature, message rejected.")
+}
+```
+
+**Again, message parsing is IMPORTANT, especially in memory unsafe languages.**<br/>
+Treat all incoming messages as invalid until proven otherwise. Do not ever try to read until a character, and handle the special section of context very well to prevent out of bounds reads. For example, you could treat the special section as a max of 15-20 3 byte chunks, remainder padded with zeroes and loop over each recognized chunk. Again, to reiterate, attackers can and will try every possible way to mess with your handling of messages. Never expect the source to follow your rules or conventions.

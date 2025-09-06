@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import './lib/crypto.ts'
+import './lib/crypt/crypto.ts'
 import './data/protocol_types.ts'
 
 

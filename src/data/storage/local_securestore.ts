@@ -1,6 +1,6 @@
 import { decode, encode } from "@msgpack/msgpack";
 import { encryptData, decryptData } from "./basic_encryption";
-import { concatUint8Arrays } from "../../lib/crypto_util";
+import { concatUint8Arrays } from "../../lib/crypt/crypto_util";
 import { expose } from "../../lib/_globals";
 
 interface Argon2IdKey {

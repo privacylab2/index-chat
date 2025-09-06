@@ -1,4 +1,4 @@
-import { concatUint8Arrays } from "../../lib/crypto_util";
+import { concatUint8Arrays } from "../../lib/crypt/crypto_util";
 
 type TimestampStore = {
   fetch: () => string | null;
