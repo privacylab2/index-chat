@@ -1,4 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron'
+import { sha256 } from 'hash-wasm'
 import fs from 'node:fs'
 import path from 'node:path'
 
@@ -59,4 +60,26 @@ contextBridge.exposeInMainWorld('electronAPI', {
     const path: string = await ensureStore(name);
     return fs.readFileSync(path);
   },
+
+  dangerousDeleteStore: async function (name: string, sha256Confirmation: string) {
+    try {
+      if (await sha256(name) == sha256Confirmation) {
+        const udp = await ipcRenderer.invoke('get-userdata-path')
+        const storePath = path.join(udp, '_ndxstore')
+        if (!fs.existsSync(storePath)) {
+          fs.mkdirSync(storePath, { recursive: true })
+        }
+
+        const storeFilePath: string = path.join(storePath, name)
+        fs.unlinkSync(storeFilePath)
+        return true
+      } else {
+        return false
+      }
+    } catch (e) {
+      console.error(e)
+      return false
+    }
+
+  }
 })

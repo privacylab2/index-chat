@@ -3,7 +3,7 @@ import { encryptData, decryptData } from "./basic_encryption";
 import { expose } from "../../../lib/_globals";
 import { concatUint8Arrays } from "../../../lib/crypt/crypto_util";
 
-interface Argon2IdKey {
+export interface Argon2IdKey {
     hash: Uint8Array,
     salt: Uint8Array
 }
@@ -29,7 +29,7 @@ export class SecureStore {
             return null
         }
 
-        return data.slice(0,16)
+        return data.slice(0, 16)
     }
 
     async read() {
@@ -46,17 +46,39 @@ export class SecureStore {
 
     async write(obj: any) {
         const encoded: any = encode(obj);
-        const encrpytionResponse: {nonce:Uint8Array,ciphertext:Uint8Array} = await encryptData(encoded, this.key.hash);
+        const encrpytionResponse: { nonce: Uint8Array, ciphertext: Uint8Array } = await encryptData(encoded, this.key.hash);
         const nonce: Uint8Array = encrpytionResponse.nonce;
         const ciphertext: Uint8Array = encrpytionResponse.ciphertext
         const fullData: Uint8Array = concatUint8Arrays(this.key.salt, nonce, ciphertext)
         return await this._write(fullData)
     }
 
+    async storeCreated() {
+        return (await electronAPI.readStore(this.name)).length !== 0
+    }
+
+    async verifyKey(): Promise<boolean> {
+        try {
+            const rawData = await this._read();
+            if (rawData.length === 0) return false;
+
+            const nonce = rawData.slice(16, 40);
+            const data = rawData.slice(40);
+            const decryptionResponse = await decryptData(data, nonce, this.key.hash);
+
+            return decryptionResponse !== null;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    /** always await to avoid race */
     async set(key: string, value: object) {
         await electronAPI.ensureStore(this.name);
         let obj: any = await this.read();
         if (obj == null) obj = {}
+        if (obj[key] == null) obj[key] = {}
         obj[key] = value;
         return await this.write(obj)
     }

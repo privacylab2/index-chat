@@ -94,9 +94,12 @@ expose({
     psm: parseSignedMessage
 })
 
-import '../../data/storage/local_securestore'
+import '../../data/storage/lib/local_securestore'
 import { NONCEGEN_ANTIREPLAY } from '../../data/generation/secure_nonce_antireplay';
 import { initializeSession } from '../messages/initializeSession';
+import { createUserAccount, deleteUserAccount } from '../../data/storage/api/userAccounts';
+import { sha256 } from 'hash-wasm';
 
 
 expose({NONCEGEN_ANTIREPLAY, initializeSession})
+expose({createUserAccount, deleteUserAccount, sha256})
