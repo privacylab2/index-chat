@@ -38,7 +38,7 @@ export function createUnauthenticatedMessage(contextU8: Uint8Array, data: Uint8A
 
 export interface SignedMessage { data: Uint8Array, signature: Uint8Array }
 /** signs a response to createUnauthenticatedMessage */
-export function signMessage(messageObject: object, identityPrivateKey: Uint8Array): SignedMessage {
+export function signMessage(identityPrivateKey: Uint8Array, messageObject: UnauthenticatedMessage): SignedMessage {
     const encoded: Uint8Array = encode(messageObject);
     const signature: Uint8Array = sodium.crypto_sign_detached(encoded, identityPrivateKey);
     return {
@@ -47,7 +47,7 @@ export function signMessage(messageObject: object, identityPrivateKey: Uint8Arra
     }
 }
 
-export function parseSignedMessage(signedMessageObject: SignedMessage, identityPublicKey: Uint8Array) {
+export function parseSignedMessage(identityPublicKey: Uint8Array, signedMessageObject: SignedMessage) {
     const signature: Uint8Array = signedMessageObject.signature;
     const data: Uint8Array = signedMessageObject.data;
     const dataUnpacked: UnauthenticatedMessage = decode(data) as UnauthenticatedMessage;
@@ -89,12 +89,14 @@ expose({
     createUm: createUnauthenticatedMessage,
     sign: signMessage,
     pmm: parseMessageMetadata,
-    encode, decode,
+    encode,
+    decode,
     psm: parseSignedMessage
 })
 
 import '../../data/storage/local_securestore'
 import { NONCEGEN_ANTIREPLAY } from '../../data/generation/secure_nonce_antireplay';
+import { initializeSession } from '../messages/initializeSession';
 
 
-expose({NONCEGEN_ANTIREPLAY})
+expose({NONCEGEN_ANTIREPLAY, initializeSession})
