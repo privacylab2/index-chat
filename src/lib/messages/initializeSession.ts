@@ -10,13 +10,20 @@ export interface SessionInitializationPayloadInterface {
     senderPublicKey: Uint8Array,
     recipientPublicKey: Uint8Array,
 }
-export async function initializeSession(identityPrivateKey: Uint8Array, payload: SessionInitializationPayloadInterface) {
+
+interface SCKeypair {
+    publicKey: Uint8Array,
+    privateKey: Uint8Array
+}
+export async function initializeSession(identityPrivateKey: Uint8Array, payload: SessionInitializationPayloadInterface, dxKeypair: SCKeypair) {
     const payloadData = {
         direct: payload.direct,
         self: payload.senderPublicKey,
         recp: payload.recipientPublicKey,
-        dmId: await sha256(concatUint8Arrays(payload.senderPublicKey, payload.recipientPublicKey)) //SENDER ALWAYS FIRST
+        dmId: await sha256(concatUint8Arrays(payload.senderPublicKey, payload.recipientPublicKey)), //SENDER ALWAYS FIRST
+        dhPublicKey: dxKeypair.publicKey
     };
+    
 
     const contextMessage: Uint8Array = generateContextMessage(
         SELF_APP_ID,
