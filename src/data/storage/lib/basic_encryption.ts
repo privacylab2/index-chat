@@ -1,7 +1,7 @@
 import sodium from 'libsodium-wrappers';
 await sodium.ready;
 import { argon2id } from "hash-wasm";
-import { expose } from '../../lib/_globals';
+import { expose } from '../../../lib/_globals';
 
 
 export async function deriveKey(pass: string, extraOptions: object, saltBytes: Uint8Array) {

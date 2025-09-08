@@ -1,4 +1,4 @@
-import { ipcRenderer, contextBridge, app } from 'electron'
+import { ipcRenderer, contextBridge } from 'electron'
 import fs from 'node:fs'
 import path from 'node:path'
 

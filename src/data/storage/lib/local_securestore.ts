@@ -1,7 +1,7 @@
 import { decode, encode } from "@msgpack/msgpack";
 import { encryptData, decryptData } from "./basic_encryption";
-import { concatUint8Arrays } from "../../lib/crypt/crypto_util";
-import { expose } from "../../lib/_globals";
+import { expose } from "../../../lib/_globals";
+import { concatUint8Arrays } from "../../../lib/crypt/crypto_util";
 
 interface Argon2IdKey {
     hash: Uint8Array,
@@ -34,7 +34,7 @@ export class SecureStore {
 
     async read() {
         const rawData = await this._read();
-        const salt: Uint8Array = rawData.slice(0,16)
+        // const salt: Uint8Array = rawData.slice(0,16)
         const nonce = rawData.slice(16, 40)
         const data = rawData.slice(40)
         const decryptionResponse = await decryptData(data, nonce, this.key.hash)
