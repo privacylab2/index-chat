@@ -41,12 +41,16 @@ export const validAlgo: Record<Algo, Uint8Array> = Object.fromEntries(
 type Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 export type Version = `${Digit}${Digit}${Digit}${Digit}`;
 
-// Example
+
 export enum Modifiers {
     /**
     * INITIAL EXCHANGE, used in KX (DKX-X25-INIT)
     */
     INIT = "NIT",
+    /**
+     * ACCEPT DIRECT MESSAGE, used in KX (DKX-X25-ADM)
+     */
+    AcceptDM = "ADM",
     /**
     * AES-256
     */
