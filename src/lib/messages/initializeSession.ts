@@ -71,10 +71,10 @@ export async function initializeSession(selfIdentityKeypair: SCKeypair, payload:
 
 export async function acceptRejectDMSession(selfIdentityKeypair: SCKeypair, signedMessageObject: SignedMessage, payload: DMSessionAcceptRejectPayloadArgumentsInterface) {
     const info = parseSignedMessage(payload.incomingPublicKey, signedMessageObject)
-    if (!info.signatureValid) return false;
+    if (!info.signatureValid) {console.log('signature invalid'); return false;}
     const incomingPayloadData = decode(info.data)
     const incomingRequest: InitializeSessionOutgoingPayloadInterface = incomingPayloadData as InitializeSessionOutgoingPayloadInterface
-    if (!(incomingRequest).direct) return false;
+    if (!(incomingRequest).direct) {console.log('dm not direct'); return false;}
     const incomimgDmId: string = incomingRequest.dmId
     const calculatedDmid: string = await sha256(concatUint8Arrays(incomingRequest.sender, selfIdentityKeypair.publicKey))
     return calculatedDmid

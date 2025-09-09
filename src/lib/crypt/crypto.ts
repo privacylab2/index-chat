@@ -91,7 +91,8 @@ expose({
     pmm: parseMessageMetadata,
     encode,
     decode,
-    psm: parseSignedMessage
+    psm: parseSignedMessage,
+    generateKXKeypair
 })
 
 import '../../data/storage/lib/local_securestore'
