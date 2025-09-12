@@ -82,6 +82,6 @@ export async function acceptRejectDMSession(selfIdentityKeypair: SCKeypair, sign
     if (!(incomingRequest).direct) {console.log('dm not direct'); return false;}
     const incomimgDmId: string = incomingRequest.dmId
     const calculatedDmid: string = await computeDmId(payload.incomingPublicKey, selfIdentityKeypair.publicKey)
+    //must also ensure that the public key that signed is the same that is being added to the dm 
     return calculatedDmid
 }
-
