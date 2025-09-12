@@ -33,4 +33,3 @@ export async function deleteUserAccount(name: string) {
     electronAPI.writeStore(userStoreName, new Uint8Array())
     return electronAPI.dangerousDeleteStore(userStoreName, await sha256(userStoreName))
 }
-

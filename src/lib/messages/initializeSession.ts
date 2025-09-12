@@ -10,6 +10,11 @@ export interface SessionInitializationPayloadArgumentsInterface {
     recipientPublicKey: Uint8Array,
 }
 
+async function computeDmId(senderPub: Uint8Array, recipientPub: Uint8Array): Promise<string> {
+    return await sha256(concatUint8Arrays(senderPub, recipientPub));
+}
+
+
 //Must be able to look up sender public key and recipient public key to name and back or else
 //it's difficult to resolve the name in a decentralized network, could use github db, gunjs, or DHT
 //!TODO: clean up sender / recipient logic and what is being sent over
@@ -41,7 +46,7 @@ export async function initializeSession(selfIdentityKeypair: SCKeypair, payload:
         direct: payload.direct,
         sender: selfIdentityKeypair.publicKey,
         recipient: payload.recipientPublicKey,
-        dmId: await sha256(concatUint8Arrays(selfIdentityKeypair.publicKey, payload.recipientPublicKey)), //SENDER ALWAYS FIRST
+        dmId: await computeDmId(selfIdentityKeypair.publicKey, payload.recipientPublicKey), //SENDER ALWAYS FIRST
         dhPublicKey: dxKeypair.publicKey
     };
 
@@ -76,7 +81,7 @@ export async function acceptRejectDMSession(selfIdentityKeypair: SCKeypair, sign
     const incomingRequest: InitializeSessionOutgoingPayloadInterface = incomingPayloadData as InitializeSessionOutgoingPayloadInterface
     if (!(incomingRequest).direct) {console.log('dm not direct'); return false;}
     const incomimgDmId: string = incomingRequest.dmId
-    const calculatedDmid: string = await sha256(concatUint8Arrays(incomingRequest.sender, selfIdentityKeypair.publicKey))
+    const calculatedDmid: string = await computeDmId(payload.incomingPublicKey, selfIdentityKeypair.publicKey)
     return calculatedDmid
 }
 
